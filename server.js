@@ -24,6 +24,25 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// when date_string is empty //
+app.get("/api/timestamp/", function(req, res) {
+  let date = new Date();
+  let utcDate = date.toUTCString();
+  res.json({"unix" : date.getTime(), "utc" : utcDate});
+});
+// when date_string is not empty
+//date string is not valid: you can't convert date to milliseconds
+//or I could use Invalid Date string
+//because timestamp is a string, we check what format it is, if it's milliseconds
+//we convert to number first to get the date
+//if invalid
+app.get("/api/timestamp/:date_string?", function (req, res) {
+    let date = Number(req.params.date_string) ? new Date(Number(req.params.date_string)) : new Date(req.params.date_string) ;
+    let utcDate = date.toUTCString();
+
+    //!isNaN(date.getTime()) ? res.json({"unix" : date.getTime(), "utc" : utcDate}) : res.json({"unix" : date.getTime(), "utc" : utcDate});
+    res.json({"unix" : date.getTime(), "utc" : utcDate});
+}) 
 
 
 // listen for requests :)
